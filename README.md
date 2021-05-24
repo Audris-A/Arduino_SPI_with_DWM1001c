@@ -23,3 +23,5 @@ Schematic: https://www.decawave.com/product/dwm1001-development-board/  RPI Head
 
 P.S. The comments above applies only to backhaul tlv request, other (tested on a few, for example "panid get") requests 
 seem to work perfectly fine without the workaround.
+
+Some parts of the code are taken from https://decaforum.decawave.com/t/spi-communication-with-arduino/2652/2
