@@ -3,7 +3,7 @@
 Arduino Uno Rev3 SPI communication with DWM1001c through DWM1001-DEV board
 
 Getting the data written by the user is only possible if the tag has "bh connected" attribute
-which can only (as of right now) achieved by initially communicating with a bridge node on a
+which can only (as of right now) be achieved by initially communicating with a bridge node on a
 raspberry pi and only then the communication can be successful with other devices.
 For this to work the tag has to be in a working network of nodes e.g. with atleast 3 anchors of whom one is
 the initiator.
