@@ -20,3 +20,6 @@ and other GPIO pins (only one that is not a part of any interface). After that w
 node thinks it is on a RBPi.
 
 Schematic: https://www.decawave.com/product/dwm1001-development-board/  RPI Header unit
+
+P.S. The comments above applies only to backhaul tlv request, other (tested on a few, for example "panid get") requests 
+seem to work perfectly fine without the workaround.
