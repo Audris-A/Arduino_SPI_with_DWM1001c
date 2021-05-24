@@ -1,6 +1,6 @@
 # Arduino and DWM1001c communication
 
-Arduino Uno Rev3 spi communication with DWM1001c through DWM1001-DEV board
+Arduino Uno Rev3 SPI communication with DWM1001c through DWM1001-DEV board
 
 Getting the data written by the user is only possible if the tag has "bh connected" attribute
 which can only (as of right now) achieved by initially communicating with a bridge node on a
