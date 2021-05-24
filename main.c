@@ -1,60 +1,41 @@
 /*
-    Getting the data written by the user is only possible if the tag has "bh connected" attribute
-      which can only (as of right now) achieved by initially communicating with a bridge node on a
-      raspberry pi and only then the communication can be successful with other devices.
-      For this to work the tag has to be in a working network of nodes e.g. with atleast 3 anchors of whom one is
-      the initiator.
-
-      Source of information (except the workaround): https://decaforum.decawave.com/t/send-show-iot-data-in-uart-shell-mode/4440
-        
-      Hypothesis: the RBPi gives somekind of signal through one of its GPIO pins to bridge node that initiates the
-      possibility of connecting to bh. Something like a broadcast message over the network. But the tag doesn't rely on
-      the bride node after the connection has been made because it doesn't lose the attribute even if the bridge node is off, ofcourse
-      as long as the network is still up and running.
+    Things to be done:
+      1) Add timestamp to messages;
+      2) Negative coordinate processing;
       
-      TODO: we have to check the output of the RBPi on boot, and what it sends to bridge node through interfaces (SPI, UART) 
-      and other GPIO pins (only one that is not a part of any interface). After that we could imitate the signal so the bridge 
-      node thinks it is on a RBPi.
-        Things to be done:
-          1) Timestamp to messages;
-          2) Negative coordinate processing;
-        
-      
-      Schematic: https://www.decawave.com/product/dwm1001-development-board/  RPI Header unit
-
-      Output example (distance values are in mm):
-        {
-          "nodeId": 192C, 
-          "distances": 
-             [
-               {
-                 "anchorId": D68B, 
-                 "distance": 956 
-               }, 
-               {
-                 "anchorId": C8B4, 
-                 "distance": 2313 
-               }, 
-               {  
-                 "anchorId": 921F, 
-                 "distance": 4038 
-               }, 
-               {
-                 "anchorId": 489B, 
-                 "distance": 4933 
-               }
-             ]
-        } 
-        {
-          "nodeId": 192C, 
-          "position":
-            {
-              "x":4.198,
-              "y":2.284,
-              "z":0.763,
-              "quality":68
-            }
-        }^B01^arduinoTest^23^room
+    Output example (distance values are in mm):
+      {
+        "nodeId": 192C, 
+        "distances": 
+           [
+             {
+               "anchorId": D68B, 
+               "distance": 956 
+             }, 
+             {
+               "anchorId": C8B4, 
+               "distance": 2313 
+             }, 
+             {  
+               "anchorId": 921F, 
+               "distance": 4038 
+             }, 
+             {
+               "anchorId": 489B, 
+               "distance": 4933 
+             }
+           ]
+      } 
+      {
+        "nodeId": 192C, 
+        "position":
+          {
+            "x":4.198,
+            "y":2.284,
+            "z":0.763,
+            "quality":68
+          }
+      }^B01^arduinoTest^23^room
 */
 
 #include <SPI.h>
