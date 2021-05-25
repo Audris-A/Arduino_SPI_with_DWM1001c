@@ -1,7 +1,7 @@
 /*
     Things to be done:
       1) Add timestamp to messages;
-      2) Negative coordinate processing;
+      2) Add SD Card logging;
       
     Output example (distance values are in mm):
       {
@@ -41,6 +41,7 @@
 #include <SPI.h>
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 SPISettings settingsA(8000000, MSBFIRST, SPI_MODE0); 
 
@@ -73,9 +74,9 @@ void loop() {
   uint8_t dummy = 0x00;
   uint16_t anchorDistance = 0x0000;
   
-  uint32_t xCoordinate = 0x00000000;
-  uint32_t yCoordinate = 0x00000000;
-  uint32_t zCoordinate = 0x00000000;
+  int32_t xCoordinate = 0x00000000;
+  int32_t yCoordinate = 0x00000000;
+  int32_t zCoordinate = 0x00000000;
   
   uint8_t userMessageCount = 0; // How many user messages are in one transfer
   uint8_t userDataLength = 29; // Length of user data to work with
@@ -226,9 +227,9 @@ void loop() {
       Serial.print(data[it_msg][21], HEX);
       Serial.print("\n");*/
       
-      xCoordinate = data[it_msg][21] << 16;
-      xCoordinate += data[it_msg][20] << 8;
-      xCoordinate += data[it_msg][19];
+      xCoordinate = (int16_t) data[it_msg][21] << 16;
+      xCoordinate += (int16_t) data[it_msg][20] << 8;
+      xCoordinate += (int16_t) data[it_msg][19];
       //Serial.print(xCoordinate, DEC);
       //Serial.print("\n");
 
@@ -238,9 +239,9 @@ void loop() {
       Serial.print(data[it_msg][24], HEX);
       Serial.print("\n");*/
       
-      yCoordinate = data[it_msg][24] << 16;
-      yCoordinate += data[it_msg][23] << 8;
-      yCoordinate += data[it_msg][22];
+      yCoordinate = (int16_t) data[it_msg][24] << 16;
+      yCoordinate += (int16_t) data[it_msg][23] << 8;
+      yCoordinate += (int16_t) data[it_msg][22];
       //Serial.print(yCoordinate, DEC);
       
       //Serial.print("\n");
@@ -250,9 +251,9 @@ void loop() {
       Serial.print(data[it_msg][27], HEX);
       Serial.print("\n");*/
 
-      zCoordinate = data[it_msg][27] << 16;
-      zCoordinate += data[it_msg][26] << 8;
-      zCoordinate += data[it_msg][25];
+      zCoordinate = (int16_t) data[it_msg][27] << 16;
+      zCoordinate += (int16_t) data[it_msg][26] << 8;
+      zCoordinate += (int16_t) data[it_msg][25];
       //Serial.print(zCoordinate, DEC);
       
       Serial.print("\n");
@@ -261,20 +262,33 @@ void loop() {
       Serial.print(data[it_msg][userDataLength-1], DEC);
       Serial.print("\n");*/
 
-      int decimalValue = xCoordinate % 1000;
-      int metres = xCoordinate/1000;
+      // Workaround for printing floating point numbers
+      uint16_t decimalValue = abs(xCoordinate) % 1000;
+      uint16_t metres = abs(xCoordinate)/1000;
       char xReal[20];
-      sprintf(xReal, "%d.%d", metres, decimalValue);
+      if (xCoordinate < 0){
+        sprintf(xReal, "-%" PRIu16 ".%" PRIu16, metres, decimalValue);
+      } else {
+        sprintf(xReal, "%" PRIu16 ".%" PRIu16, metres, decimalValue);
+      }
 
-      decimalValue = yCoordinate % 1000;
-      metres = yCoordinate/1000;
+      decimalValue = abs(yCoordinate) % 1000;
+      metres = abs(yCoordinate)/1000;
       char yReal[20];
-      sprintf(yReal, "%d.%d", metres, decimalValue);
-
-      decimalValue = zCoordinate % 1000;
-      metres = zCoordinate/1000;
+      if (yCoordinate < 0){
+        sprintf(yReal, "-%" PRIu16 ".%" PRIu16, metres, decimalValue);
+      } else {
+        sprintf(yReal, "%" PRIu16 ".%" PRIu16, metres, decimalValue);
+      }
+  
+      decimalValue = abs(zCoordinate) % 1000;
+      metres = abs(zCoordinate)/1000;
       char zReal[20];
-      sprintf(zReal, "%d.%d", metres, decimalValue);
+      if (zCoordinate < 0){
+        sprintf(zReal, "-%" PRIu16 ".%" PRIu16, metres, decimalValue);
+      } else {
+        sprintf(zReal, "%" PRIu16 ".%" PRIu16, metres, decimalValue);
+      }
 
       sprintf(locationBuffer, "{\"nodeId\": %02X%02X, \"position\":{\"x\":%s,\"y\":%s,\"z\":%s,\"quality\":%d}}^%s^%s^%d^%s", 
                              data[it_msg][1],
