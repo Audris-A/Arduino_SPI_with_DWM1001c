@@ -12,7 +12,7 @@ Source of information (except the workaround): https://decaforum.decawave.com/t/
     
 Hypothesis: the RBPi gives somekind of signal through one of its GPIO pins to bridge node that initiates the
 possibility of connecting to bh. Something like a broadcast message over the network. But the tag doesn't rely on
-the bride node after the connection has been made because it doesn't lose the attribute even if the bridge node is off, ofcourse
+the bridge node after the connection has been made because it doesn't lose the attribute even if the bridge node is off, ofcourse
 as long as the network is still up and running.
   
 TODO: we have to check the output of the RBPi on boot, and what it sends to bridge node through interfaces (SPI, UART) 
